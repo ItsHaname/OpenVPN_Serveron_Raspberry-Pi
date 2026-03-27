@@ -21,6 +21,7 @@ Le système est composé de trois éléments principaux connectés via Internet 
 [ Réseau local sécurisé ]
      Plage VPN  : 10.8.0.0/24
 ```
+<img width="1197" height="800" alt="image" src="https://github.com/user-attachments/assets/d4f09521-65f7-44c3-8962-bf9928cd40af" />
 
 ---
 
