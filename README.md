@@ -1,5 +1,7 @@
-# 🔐 Serveur OpenVPN sur Raspberry Pi 5 — Analyse de Sécurité Cryptographique
-
+  # OpenVPN
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=28&pause=1000&color=FF6B9D&center=true&vCenter=true&width=750&lines=%F0%9F%94%90+Serveur+OpenVPN+sur+Raspberry+Pi+5;%E2%80%94+Analyse+de+S%C3%A9curit%C3%A9+Cryptographique+%E2%80%94" alt="Typing SVG" />
+</p>
 <div align="center">
 
 ![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi%205-A22846?style=for-the-badge&logo=raspberry-pi&logoColor=white)
