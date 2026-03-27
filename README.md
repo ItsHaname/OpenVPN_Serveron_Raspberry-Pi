@@ -1,4 +1,4 @@
-# 🔐 OpenVPN Server on Raspberry Pi 5 — Cryptographic Security Analysis
+# 🔐 Serveur OpenVPN sur Raspberry Pi 5 — Analyse de Sécurité Cryptographique
 
 <div align="center">
 
@@ -8,152 +8,140 @@
 ![TLS](https://img.shields.io/badge/TLS%201.3-005F99?style=for-the-badge&logo=letsencrypt&logoColor=white)
 ![AES](https://img.shields.io/badge/AES--256-4CAF50?style=for-the-badge&logo=gnupg&logoColor=white)
 
-**Design and deployment of a secure VPN server with PKI and cryptographic performance analysis.**
+**Conception et déploiement d'un serveur VPN sécurisé avec infrastructure à clé publique (PKI) et analyse des performances cryptographiques.**
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## 📋 Table des Matières
 
-- [Overview](#-overview)
-- [Objectives](#-objectives)
-- [System Architecture](#-system-architecture)
-- [Technologies Used](#-technologies-used)
-- [Public Key Infrastructure (PKI)](#-public-key-infrastructure-pki)
+- [Vue d'ensemble](#-vue-densemble)
+- [Objectifs](#-objectifs)
+- [Architecture du Système](#-architecture-du-système)
+- [Technologies Utilisées](#-technologies-utilisées)
+- [Infrastructure à Clé Publique (PKI)](#-infrastructure-à-clé-publique-pki)
 - [Installation & Configuration](#-installation--configuration)
-- [Cryptographic Analysis](#-cryptographic-analysis)
-- [Security Properties](#-security-properties)
-- [Performance Comparison: AES-128 vs AES-256](#-performance-comparison-aes-128-vs-aes-256)
-- [Results](#-results)
-- [Author](#-author)
+- [Analyse Cryptographique](#-analyse-cryptographique)
+- [Propriétés de Sécurité](#-propriétés-de-sécurité)
+- [Comparaison de Performances : AES-128 vs AES-256](#-comparaison-de-performances--aes-128-vs-aes-256)
+- [Résultats](#-résultats)
+- [Auteur](#-auteur)
 
 ---
 
-## 🌐 Overview
+## 🌐 Vue d'Ensemble
 
-This project presents the **design and implementation of a secure VPN server** using OpenVPN deployed on a **Raspberry Pi 5**. It goes beyond a basic VPN setup by integrating a full **Public Key Infrastructure (PKI)** and evaluating the security and performance of different encryption algorithms.
+Ce projet présente la **conception et l'implémentation d'un serveur VPN sécurisé** basé sur OpenVPN, déployé sur un **Raspberry Pi 5**. Il va au-delà d'une simple configuration VPN en intégrant une **Infrastructure à Clé Publique (PKI) complète** et en évaluant la sécurité ainsi que les performances de différents algorithmes de chiffrement.
 
-The system creates an encrypted tunnel between a remote client (PC or smartphone) and a local network hosted behind the Raspberry Pi, ensuring **confidentiality**, **integrity**, and **mutual authentication**.
-
----
-
-## 🎯 Objectives
-
-- ✅ Deploy an OpenVPN server on a Raspberry Pi 5
-- ✅ Implement a complete Public Key Infrastructure (PKI) with Easy-RSA
-- ✅ Secure all communications using TLS
-- ✅ Analyze VPN security properties (confidentiality, integrity, authentication)
-- ✅ Compare performance of AES-128 and AES-256 encryption on constrained hardware
+Le système crée un tunnel chiffré entre un client distant (PC ou smartphone) et un réseau local hébergé derrière le Raspberry Pi, garantissant **confidentialité**, **intégrité** et **authentification mutuelle**.
 
 ---
 
-## 🏗️ System Architecture
+## 🎯 Objectifs
 
-```
-                          Internet
-                             │
-        ┌────────────────────┼────────────────────┐
-        │                    │                    │
-  ┌─────▼──────┐     ┌───────▼────────┐          │
-  │ VPN Client │◄───►│ OpenVPN Server │          │
-  │  (PC / 📱) │     │ Raspberry Pi 5 │          │
-  └────────────┘     └───────┬────────┘          │
-   Encrypted Tunnel          │                   │
-   (TLS + AES)        ┌──────▼──────┐            │
-                      │  Secure LAN  │            │
-                      │  (Private    │            │
-                      │   Network)   │            │
-                      └─────────────┘            │
-        └──────────────────────────────────────────┘
-```
+- ✅ Déployer un serveur OpenVPN sur Raspberry Pi 5
+- ✅ Implémenter une PKI complète avec Easy-RSA
+- ✅ Sécuriser toutes les communications via TLS
+- ✅ Analyser les propriétés de sécurité du VPN (confidentialité, intégrité, authentification)
+- ✅ Comparer les performances d'AES-128 et AES-256 sur matériel embarqué
 
-The architecture is composed of **three main components**:
+---
 
-| Component | Role |
+##  Architecture du Système
+
+
+<img width="1604" height="817" alt="image" src="https://github.com/user-attachments/assets/3632c556-cd55-4985-b864-48adad7d0f74" />
+
+
+L'architecture repose sur **trois composants principaux** :
+
+| Composant | Rôle |
 |---|---|
-| 🖥️ VPN Client | PC or smartphone connecting over the Internet |
-| 🍓 OpenVPN Server (Raspberry Pi 5) | Handles encrypted tunnels and routing |
-| 🔒 Secure Local Network | Private network accessible only through the VPN |
+| 🖥️ Client VPN | PC ou smartphone se connectant via Internet |
+| 🍓 Serveur OpenVPN (Raspberry Pi 5) | Gère les tunnels chiffrés et le routage |
+| 🔒 Réseau Local Sécurisé | Réseau privé accessible uniquement via le VPN |
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Technologies Utilisées
 
-| Technology | Purpose |
+| Technologie | Rôle |
 |---|---|
-| **OpenVPN** | VPN tunnel management |
-| **Easy-RSA** | PKI and certificate management |
-| **TLS 1.3** | Transport Layer Security for the control channel |
-| **AES-128 / AES-256** | Data encryption (data channel) |
-| **Raspberry Pi OS** | Linux-based server OS (Debian) |
-| **HMAC-SHA256** | Message integrity and authentication |
+| **OpenVPN** | Gestion du tunnel VPN |
+| **Easy-RSA** | Gestion de la PKI et des certificats |
+| **TLS 1.3** | Sécurisation du canal de contrôle |
+| **AES-128 / AES-256** | Chiffrement des données (canal de données) |
+| **Raspberry Pi OS** | Système d'exploitation serveur basé sur Linux (Debian) |
+| **HMAC-SHA256** | Intégrité des messages et authentification |
 
 ---
 
-## 🔑 Public Key Infrastructure (PKI)
+## 🔑 Infrastructure à Clé Publique (PKI)
 
-A full PKI is implemented using **Easy-RSA** to enable mutual authentication between the server and all clients.
+Une PKI complète est implémentée via **Easy-RSA** pour permettre l'authentification mutuelle entre le serveur et tous les clients.
 
 ```
-Certificate Authority (CA)  ← Root of Trust
+Autorité de Certification (CA)  ← Racine de Confiance
         │
-        ├──► Server Certificate    (signed by CA)
+        ├──► Certificat Serveur     (signé par la CA)
         │
-        ├──► Client Certificate 1  (signed by CA)
+        ├──► Certificat Client 1    (signé par la CA)
         │
-        └──► Client Certificate N  (signed by CA)
+        └──► Certificat Client N    (signé par la CA)
 ```
 
-### PKI Components
+### Composants de la PKI
 
-- **CA (Certificate Authority)** — The root of trust; signs all certificates
-- **Server Certificate** — Proves the server's identity to connecting clients
-- **Client Certificates** — Unique per client; enables individual revocation (CRL)
-- **Diffie-Hellman Parameters** — Ensures Perfect Forward Secrecy (PFS)
-- **TLS Auth Key (ta.key)** — Additional HMAC layer against DDoS and unauthorized connections
+| Composant | Description |
+|---|---|
+| **CA (Autorité de Certification)** | Racine de confiance ; signe tous les certificats |
+| **Certificat Serveur** | Prouve l'identité du serveur aux clients |
+| **Certificats Clients** | Uniques par client ; permet la révocation individuelle (CRL) |
+| **Paramètres Diffie-Hellman** | Garantit la confidentialité persistante (PFS) |
+| **Clé TLS Auth (ta.key)** | Couche HMAC supplémentaire contre les attaques DDoS et connexions non autorisées |
 
 ---
 
 ## ⚙️ Installation & Configuration
 
-### Prerequisites
+### Prérequis
 
-- Raspberry Pi 5 running Raspberry Pi OS (64-bit recommended)
-- Static local IP or dynamic DNS configured
-- Port forwarding: `UDP 1194` opened on your router
+- Raspberry Pi 5 sous Raspberry Pi OS (64 bits recommandé)
+- Adresse IP locale statique ou DNS dynamique configuré
+- Redirection de port : `UDP 1194` ouvert sur votre routeur
 
-### 1. Install Dependencies
+### 1. Installation des Dépendances
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install openvpn easy-rsa -y
 ```
 
-### 2. Set Up Easy-RSA PKI
+### 2. Mise en Place de la PKI avec Easy-RSA
 
 ```bash
 make-cadir ~/openvpn-ca
 cd ~/openvpn-ca
 
-# Initialize the PKI
+# Initialisation de la PKI
 ./easyrsa init-pki
 
-# Build the Certificate Authority
+# Création de l'Autorité de Certification
 ./easyrsa build-ca
 
-# Generate server certificate and key
+# Génération du certificat et de la clé serveur
 ./easyrsa gen-req server nopass
 ./easyrsa sign-req server server
 
-# Generate Diffie-Hellman parameters
+# Génération des paramètres Diffie-Hellman
 ./easyrsa gen-dh
 
-# Generate TLS authentication key
+# Génération de la clé d'authentification TLS
 openvpn --genkey secret ta.key
 ```
 
-### 3. Generate Client Certificate
+### 3. Génération du Certificat Client
 
 ```bash
 cd ~/openvpn-ca
@@ -161,14 +149,14 @@ cd ~/openvpn-ca
 ./easyrsa sign-req client client1
 ```
 
-### 4. Configure the OpenVPN Server
+### 4. Configuration du Serveur OpenVPN
 
 ```bash
 sudo cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/
 sudo nano /etc/openvpn/server.conf
 ```
 
-Key configuration parameters:
+Paramètres de configuration clés :
 
 ```ini
 port 1194
@@ -185,7 +173,7 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.8.8"
 
 tls-auth ta.key 0
-cipher AES-256-CBC        # or AES-128-CBC for comparison
+cipher AES-256-CBC        # ou AES-128-CBC pour la comparaison
 auth SHA256
 
 keepalive 10 120
@@ -197,14 +185,14 @@ persist-tun
 verb 3
 ```
 
-### 5. Enable IP Forwarding & Start the Server
+### 5. Activation du Forwarding IP et Démarrage du Serveur
 
 ```bash
-# Enable IP forwarding
+# Activation du forwarding IP
 echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 
-# Enable and start OpenVPN
+# Activation et démarrage d'OpenVPN
 sudo systemctl enable openvpn@server
 sudo systemctl start openvpn@server
 sudo systemctl status openvpn@server
@@ -212,48 +200,50 @@ sudo systemctl status openvpn@server
 
 ---
 
-## 🔬 Cryptographic Analysis
+## 🔬 Analyse Cryptographique
 
-### Encryption — AES (Advanced Encryption Standard)
+### Chiffrement — AES (Advanced Encryption Standard)
 
-OpenVPN uses AES for the **data channel** (encrypting actual traffic):
+OpenVPN utilise AES pour le **canal de données** (chiffrement du trafic réel) :
 
-| Mode | Key Size | Block Size | Security Level |
+| Mode | Taille de Clé | Taille de Bloc | Niveau de Sécurité |
 |---|---|---|---|
-| AES-128-CBC | 128 bits | 128 bits | Very High (~2¹²⁸) |
+| AES-128-CBC | 128 bits | 128 bits | Très élevé (~2¹²⁸) |
 | AES-256-CBC | 256 bits | 128 bits | Maximum (~2²⁵⁶) |
 
-### Key Exchange — TLS + Diffie-Hellman
+### Échange de Clés — TLS + Diffie-Hellman
 
-The **control channel** uses TLS 1.3 with Diffie-Hellman key exchange, ensuring:
-- **Perfect Forward Secrecy (PFS)**: Session keys are ephemeral — compromising the server key does not expose past sessions
-- **Authenticated Key Exchange**: Both parties verify each other via PKI certificates
+Le **canal de contrôle** utilise TLS 1.3 avec échange de clés Diffie-Hellman, garantissant :
 
-### Integrity — HMAC-SHA256
+- **Confidentialité Persistante (PFS)** : Les clés de session sont éphémères — compromettre la clé serveur n'expose pas les sessions passées
+- **Échange de Clés Authentifié** : Les deux parties se vérifient mutuellement via les certificats PKI
 
-Each data packet is signed with HMAC-SHA256, ensuring:
-- No packet tampering goes undetected
-- Protection against replay attacks
+### Intégrité — HMAC-SHA256
+
+Chaque paquet de données est signé avec HMAC-SHA256, assurant :
+
+- Toute altération de paquet est détectée et rejetée
+- Protection contre les attaques par rejeu
 
 ---
 
-## 🛡️ Security Properties
+## 🛡️ Propriétés de Sécurité
 
-| Property | Mechanism | Description |
+| Propriété | Mécanisme | Description |
 |---|---|---|
-| 🔒 **Confidentiality** | AES-256-CBC | All traffic is encrypted; intercepted packets are unreadable |
-| ✅ **Integrity** | HMAC-SHA256 | Any modification to packets is detected and rejected |
-| 👤 **Authentication** | PKI + X.509 Certificates | Both client and server prove their identity mutually |
-| 🔄 **Perfect Forward Secrecy** | Ephemeral DH Keys | Past sessions remain secure even if long-term keys are compromised |
-| 🚫 **Anti-Replay** | TLS Sequence Numbers | Prevents attackers from replaying captured packets |
+| 🔒 **Confidentialité** | AES-256-CBC | Tout le trafic est chiffré ; les paquets interceptés sont illisibles |
+| ✅ **Intégrité** | HMAC-SHA256 | Toute modification de paquet est détectée et rejetée |
+| 👤 **Authentification** | PKI + Certificats X.509 | Client et serveur prouvent mutuellement leur identité |
+| 🔄 **Confidentialité Persistante** | Clés DH Éphémères | Les sessions passées restent sécurisées même si les clés à long terme sont compromises |
+| 🚫 **Anti-Rejeu** | Numéros de Séquence TLS | Empêche les attaquants de rejouer des paquets capturés |
 
 ---
 
-## 📊 Performance Comparison: AES-128 vs AES-256
+## 📊 Comparaison de Performances : AES-128 vs AES-256
 
-### Benchmark Methodology
+### Méthodologie de Benchmark
 
-Tests were conducted using `openssl speed` on the Raspberry Pi 5 under identical load conditions.
+Les tests ont été réalisés avec `openssl speed` sur le Raspberry Pi 5 dans des conditions de charge identiques.
 
 ```bash
 # Benchmark AES-128
@@ -263,44 +253,44 @@ openssl speed -evp aes-128-cbc
 openssl speed -evp aes-256-cbc
 ```
 
-### Expected Results on Raspberry Pi 5
+### Résultats Attendus sur Raspberry Pi 5
 
-| Algorithm | Throughput (approx.) | CPU Usage | Recommended Use |
+| Algorithme | Débit (approx.) | Utilisation CPU | Cas d'Usage Recommandé |
 |---|---|---|---|
-| **AES-128-CBC** | ~300 MB/s | Lower | High-throughput scenarios |
-| **AES-256-CBC** | ~250 MB/s | Slightly higher | Maximum security required |
+| **AES-128-CBC** | ~300 Mo/s | Faible | Scénarios à haut débit |
+| **AES-256-CBC** | ~250 Mo/s | Légèrement supérieur | Sécurité maximale requise |
 
-> ⚠️ **Note:** The Raspberry Pi 5 includes hardware AES acceleration (ARM Cortex-A76), significantly reducing the performance gap between AES-128 and AES-256.
+> ⚠️ **Remarque :** Le Raspberry Pi 5 intègre une accélération matérielle AES (ARM Cortex-A76), réduisant significativement l'écart de performances entre AES-128 et AES-256.
 
 ### Conclusion
 
-The performance difference between AES-128 and AES-256 on the Raspberry Pi 5 is **minimal** due to hardware acceleration. For most use cases, **AES-256** is recommended given its superior security margin at negligible cost.
+La différence de performances entre AES-128 et AES-256 sur le Raspberry Pi 5 est **minimale** grâce à l'accélération matérielle. Pour la majorité des cas d'usage, **AES-256** est recommandé compte tenu de sa marge de sécurité supérieure à un coût négligeable.
 
 ---
 
-## 📈 Results
+## 📈 Résultats
 
-| Metric | Value |
+| Indicateur | Valeur |
 |---|---|
-| ✅ VPN Tunnel Established | Yes |
-| 🔐 Mutual Authentication | PKI Certificates (X.509) |
-| 🔑 Encryption | AES-256-CBC |
-| 🔏 Integrity | HMAC-SHA256 |
-| 🔄 Forward Secrecy | Yes (Ephemeral DH) |
-| 📡 Protocol | OpenVPN over UDP 1194 |
-| 🖥️ Hardware | Raspberry Pi 5 (ARM Cortex-A76) |
+| ✅ Tunnel VPN Établi | Oui |
+| 🔐 Authentification Mutuelle | Certificats PKI (X.509) |
+| 🔑 Chiffrement | AES-256-CBC |
+| 🔏 Intégrité | HMAC-SHA256 |
+| 🔄 Confidentialité Persistante | Oui (DH Éphémère) |
+| 📡 Protocole | OpenVPN sur UDP 1194 |
+| 🖥️ Matériel | Raspberry Pi 5 (ARM Cortex-A76) |
 
 ---
 
-## 👤 Author
+## 👤 Auteur
 
-**Hanane AIT BAH**  
+**Hanane AIT BAH**
 🔗 [@ItsHaname](https://github.com/ItsHaname)
 
 ---
 
 <div align="center">
 
-⭐ If you found this project useful, feel free to **star** the repository!
+⭐ Si ce projet vous a été utile, n'hésitez pas à **mettre une étoile** au dépôt !
 
 </div>
