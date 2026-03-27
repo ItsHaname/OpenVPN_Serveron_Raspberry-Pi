@@ -1,0 +1,9 @@
+# Clés privées — NE JAMAIS committer
+pki/private/
+pki/*.key
+config/*.key
+*.p12
+
+# Fichiers sensibles
+ta.key
+*.ovpn
